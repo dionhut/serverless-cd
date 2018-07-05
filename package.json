@@ -1,0 +1,23 @@
+{
+  "name": "serverless-ci",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "jest",
+    "build": "babel src -d bin"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.268.1",
+    "commander": "^2.16.0",
+    "yargs": "^12.0.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.2.0",
+    "babel-preset-es2015": "^6.24.1",
+    "jest": "^23.2.0"
+  },
+  "author": "dionhut@outlook.com",
+  "license": "ISC"
+}

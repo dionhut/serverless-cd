@@ -1,0 +1,32 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch File",
+            "program": "${file}",
+            // "outFiles": [
+            //     "${workspaceFolder}/bin/**/*.js"
+            // ],
+            "args": [
+                "promote-function",
+                "arn:aws:lambda:us-east-1:522555813108:function:BookShelfLambda-HelloWorld",
+                "--to-alias",
+                "dev"
+            ],
+            // "sourceMaps": true,
+            // "cwd": "${workspaceFolder}",
+            "preLaunchTask": "build",
+            // "runtimeArgs": [
+            //     "--nolazy"
+            // ],
+            "env": {
+                "AWS_REGION": "us-east-1"
+            }
+        }
+    ]
+}
