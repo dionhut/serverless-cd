@@ -21,9 +21,6 @@
             // "sourceMaps": true,
             // "cwd": "${workspaceFolder}",
             "preLaunchTask": "build",
-            // "runtimeArgs": [
-            //     "--nolazy"
-            // ],
             "env": {
                 "AWS_REGION": "us-east-1"
             }
