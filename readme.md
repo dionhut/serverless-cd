@@ -35,14 +35,15 @@ Options:
 
 ## apigateway
 ```
-09:13 $ ./bin/serverless-cd.js apigateway --help
+09:10 $ ./bin/serverless-cd.js apigateway --help
 serverless-cd.js apigateway <command>
 
 API Gateway CD commands
 
 Commands:
-  serverless-cd.js apigateway               API Gateway commands
-  update-method <command>
+  serverless-cd.js apigateway               Set API gateway method lambda
+  set-method-function                       function and update lambda
+                                            permissions
 
 Options:
   --version  Show version number                                       [boolean]
