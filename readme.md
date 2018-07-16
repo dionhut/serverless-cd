@@ -4,48 +4,51 @@ Some useful serverless CD commands to more easily execute combined AWS lambda, a
 
 ## --help
 ```
-09:09 $ ./bin/serverless-cd.js --help
+19:36 $ ./bin/serverless-cd.js --help
 serverless-cd.js <command>
 
 Commands:
-  serverless-cd.js apigateway <command>  API Gateway CD commands
-  serverless-cd.js lambda <command>      Lambda CD commands
+  serverless-cd.js apigateway <command>      AWS API Gateway continous deployment commands
+  serverless-cd.js cloudformation <command>  AWS CloudFormation continous deployment commands
+  serverless-cd.js lambda <command>          AWS Lambda continous deployment commands
 
 Options:
-  --version  Show version number                                       [boolean]
-  --help     Show help                                                 [boolean]
+  --version  Show version number                                                                               [boolean]
+  --help     Show help                                                                                         [boolean]
 ```
 
 ## lambda
 ```
-09:09 $ ./bin/serverless-cd.js lambda --help
+20:34 $ ./bin/serverless-cd.js lambda
 serverless-cd.js lambda <command>
 
-Lambda CD commands
+AWS Lambda continous deployment commands
 
 Commands:
-  serverless-cd.js lambda promote           Create or update Lambda function
-  <function-name>                           alias to a new version or a version
-                                            linked to another alias
-
-Options:
-  --version  Show version number                                       [boolean]
-  --help     Show help                                                 [boolean]
+  serverless-cd.js lambda deploy <function-name>  Create or update Lambda function alias to a new version or a version
+                                                  linked to another alias
 ```
 
 ## apigateway
 ```
-09:10 $ ./bin/serverless-cd.js apigateway --help
+20:35 $ ./bin/serverless-cd.js apigateway
 serverless-cd.js apigateway <command>
 
-API Gateway CD commands
+AWS API Gateway continous deployment commands
 
 Commands:
-  serverless-cd.js apigateway               Set API gateway method lambda
-  set-method-function                       function and update lambda
-                                            permissions
+  serverless-cd.js apigateway set-method-function  Set API gateway method lambda function and update lambda permissions
+```
 
-Options:
-  --version  Show version number                                       [boolean]
-  --help     Show help                                                 [boolean]
+## cloudformation
+```
+20:35 $ ./bin/serverless-cd.js cloudformation
+serverless-cd.js cloudformation <command>
+
+AWS CloudFormation continous deployment commands
+
+Commands:
+  serverless-cd.js cloudformation deploy-all-functions          Create or update Lambda function alias to a new version
+  <stack-name>                                                  or a version linked to another alias for each lambda
+                                                                created by cloudformation stack
 ```
