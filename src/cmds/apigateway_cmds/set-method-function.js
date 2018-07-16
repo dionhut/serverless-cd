@@ -1,5 +1,4 @@
-import AWS from 'aws-sdk';
-import _ from 'lodash';
+import {APIGatewayService} from '../../services/APIGatewayService'
 
 export const command = 'set-method-function'
 export const desc = 'Set API gateway method lambda function and update lambda permissions'
@@ -19,9 +18,12 @@ export const builder = (yargs) => {
     }).option('function-alias', {
         type: 'string',
         describe: 'Lambda function alias'
-    }).demandOption(['rest-api-id', 'http-method', 'resource-id', 'function-name']);
+    }).option('alias-stage-variable', {
+        type: 'string',
+        describe: 'Variable to associate API Gateway stage deployment to lambda deployed version'
+    }).demandOption(['rest-api-id', 'http-method', 'resource-id', 'function-name', 'alias-stage-variable']);
 }
 export function handler (argv) {
-    return setMethodFunction(argv.restApiId, argv.httpMethod, argv.resouceId, argv.functionName,
-        argv.functionAlias);
+    return new APIGatewayService().setMethodFunction(argv.restApiId, argv.httpMethod, argv.resourceId,
+        argv.functionName, argv.functionAlias, argv.aliasStageVariable);
 }

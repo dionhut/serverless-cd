@@ -13,13 +13,20 @@
                 "${workspaceFolder}/bin/**/*.js"
             ],
             "args": [
-                "cloudformation",
-                "deploy-all-functions",
-                "BookShelfAPI",
-                "--to-alias",
-                "dev2",
-                "--from-alias",
-                "dev"
+                "apigateway",
+                "set-method-function",
+                "--rest-api-id",
+                "r3d2bggsuj",
+                "--http-method",
+                "GET",
+                "--resource-id",
+                "77b214",
+                "--function-name",
+                "BookShelfLambda-UserBooks",
+                "--function-alias",
+                "dev",
+                "--alias-stage-variable",
+                "fnAlias"
             ],
             "sourceMaps": true,
             // "cwd": "${workspaceFolder}",

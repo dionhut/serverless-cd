@@ -9,6 +9,7 @@
   "dependencies": {
     "aws-sdk": "^2.268.1",
     "commander": "^2.16.0",
+    "uuid": "^3.3.2",
     "yargs": "^12.0.1"
   },
   "devDependencies": {

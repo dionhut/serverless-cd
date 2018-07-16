@@ -1,43 +1,72 @@
+import AWS from 'aws-sdk';
+import uuid from "uuid/v1";
+import _ from 'lodash';
+
 export class APIGatewayService {
-    async setMethodFunction(restApiId, httpMethod, resouceId, functionName, functionAlias) {
-        let lambda = new AWS.lambda();
-        let apiGateway = new AWS.apigateway();
+    async setMethodFunction(restApiId, httpMethod, resourceId, functionName, functionAlias, aliasStageVariable) {
+        let lambda = new AWS.Lambda();
+        let apiGateway = new AWS.APIGateway();
 
         let lambdaFunction = await lambda.getFunction({
             FunctionName: functionName
         }).promise();
 
-        let functionArn = lambdaFunction.FunctionArn;
-        if(functionAlias) {
-            functionArn = `${functionArn}:${functionAlias}`
-        }
-
-        await apigateway.updateIntegration({
+        let integration = await apiGateway.getIntegration({
             httpMethod: httpMethod,
-            resouceId: resouceId,
+            resourceId: resourceId,
             restApiId: restApiId,
-            patchOperations: {
-                op: 'replace',
-                path: '/url',
-                value: `arn:aws:apigateway:${AWS.config.region}:lambda:path/2015-03-31/functions/${functionArn}/invocations`,
-            }
         }).promise();
 
-        let resource = await apigateway.getResource({
-            resouceId: resouceId,
+        let resource = await apiGateway.getResource({
+            resourceId: resourceId,
             restApiId: restApiId
         }).promise();
 
-        if(resource.resourceMethods[httpMethod]) {
-            let path = _.replace("/users/{userId}/books/{id}", /\{[^\/]+\}/g, '*');
-
-            await lambda.addPermission({
-                Action: 'lambda:InvokeFunction',
-                FunctionName: functionName,
-                Principal: 'apigateway.amazonaws.com',
-                StatementId: 'uuid-1',
-                SourceArn: `arn:aws:execute-api:${AWS.config.region}:${AWS.config.AccountId}:${BookShelfApiGateway}${path}`
-            }).promise();
+        let functionArn = lambdaFunction.Configuration.FunctionArn;
+        if(functionAlias) {
+            functionArn = `${functionArn}:${functionAlias}`;
         }
+
+        let integrationFunctionArn = lambdaFunction.Configuration.FunctionArn;
+        if(aliasStageVariable) {
+            integrationFunctionArn = `${integrationFunctionArn}:\${stageVariables.${aliasStageVariable}}`
+        } else if(functionAlias) {
+            integrationFunctionArn = `${integrationFunctionArn}:${functionAlias}`
+        }
+
+        let methodPath = _.replace(resource.path, /\{[^\/]+\}/g, '*');
+        let accountId = functionArn.split(':')[4];
+        let integartionUrl = `arn:aws:apigateway:${AWS.config.region}:lambda:path/2015-03-31/functions/${integrationFunctionArn}/invocations`;
+
+        if(integration.uri === integartionUrl) {
+            console.log(`Method ${httpMethod} ${methodPath} already set to ${integartionUrl}`);
+            return;
+        }
+
+        if(!resource.resourceMethods[httpMethod]) {
+            throw new Error(`Method ${httpMethod} ${methodPath} not found`);
+        }
+
+        await apiGateway.updateIntegration({
+            httpMethod: httpMethod,
+            resourceId: resourceId,
+            restApiId: restApiId,
+            patchOperations: [{
+                op: 'replace',
+                path: '/uri',
+                value: integartionUrl,
+            }]
+        }).promise();
+
+        let sourceArn = `arn:aws:execute-api:${AWS.config.region}:${accountId}:${restApiId}/*/${httpMethod}${methodPath}`;
+        await lambda.addPermission({
+            Action: 'lambda:InvokeFunction',
+            FunctionName: functionArn,
+            Principal: 'apigateway.amazonaws.com',
+            StatementId: uuid(),
+            SourceArn: sourceArn
+        }).promise();
+
+        console.log(`Done setting ${httpMethod} ${methodPath} ${lambdaFunction}`);
     }
 }
