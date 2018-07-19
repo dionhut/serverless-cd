@@ -1,4 +1,4 @@
-import LambdaService from '../../services/LambdaService';
+import {LambdaService} from '../../services/LambdaService';
 
 export const command = 'deploy <function-name>'
 export const desc = 'Create or update Lambda function alias to a new version or a version linked to another alias'

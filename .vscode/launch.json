@@ -7,29 +7,50 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Deploy Lambda",
             "program": "${workspaceFolder}/bin/serverless-cd.js",
             "outFiles": [
                 "${workspaceFolder}/bin/**/*.js"
             ],
             "args": [
+                "lambda",
+                "deploy",
+                "BookShelf-HelloWorld",
+                "--to-alias",
+                "dev"
+            ],
+            "sourceMaps": true,
+            "preLaunchTask": "build",
+            "env": {
+                "AWS_REGION": "us-east-1",
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Set Stack Method Function",
+            "program": "${workspaceFolder}/bin/serverless-cd.js",
+            "outFiles": [
+                "${workspaceFolder}/bin/**/*.js"
+            ],
+            "args": [
+                "cloudformation",
                 "apigateway",
                 "set-method-function",
-                "--rest-api-id",
-                "r3d2bggsuj",
+                "--stack-name",
+                "BookShelf",
                 "--http-method",
                 "GET",
-                "--resource-id",
-                "77b214",
+                "--resource",
+                "/users/{userId}/books",
                 "--function-name",
-                "BookShelfLambda-UserBooks",
+                "BookShelf-UserBooks",
                 "--function-alias",
                 "dev",
                 "--alias-stage-variable",
                 "fnAlias"
             ],
             "sourceMaps": true,
-            // "cwd": "${workspaceFolder}",
             "preLaunchTask": "build",
             "env": {
                 "AWS_REGION": "us-east-1"

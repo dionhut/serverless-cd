@@ -1,6 +1,7 @@
 import AWS from 'aws-sdk';
 import uuid from "uuid/v1";
 import _ from 'lodash';
+import {CloudFormationService} from '../services/CloudFormationService';
 
 export class APIGatewayService {
     async setMethodFunction(restApiId, httpMethod, resourceId, functionName, functionAlias, aliasStageVariable) {
@@ -39,7 +40,7 @@ export class APIGatewayService {
         let integartionUrl = `arn:aws:apigateway:${AWS.config.region}:lambda:path/2015-03-31/functions/${integrationFunctionArn}/invocations`;
 
         if(integration.uri === integartionUrl) {
-            console.log(`Method ${httpMethod} ${methodPath} already set to ${integartionUrl}`);
+            console.log(`${httpMethod} ${resource.path} already set to ${functionName}`);
             return;
         }
 
@@ -67,6 +68,31 @@ export class APIGatewayService {
             SourceArn: sourceArn
         }).promise();
 
-        console.log(`Done setting ${httpMethod} ${methodPath} ${lambdaFunction}`);
+        console.log(`Done setting ${httpMethod} ${resource.path} to ${functionName}`);
+    }
+
+    async setStackMethodFunction(stackName, httpMethod, resource, functionName, functionAlias, aliasStageVariable) {
+        let apiGateway = new AWS.APIGateway();
+        let cloudFormationService = new CloudFormationService();
+
+        let restApis = await cloudFormationService.getStackAPIGateways(stackName);
+
+        if(!restApis || restApis.length == 0) {
+            throw new Error("Rest api not found");
+        }
+        let restApi = restApis[0];
+
+        let apiResources = await apiGateway.getResources({
+            restApiId: restApi.PhysicalResourceId
+        }).promise();
+
+        let apiResource = _.filter(apiResources.items, res => {
+            return res.resourceMethods ? res.resourceMethods[httpMethod] && res.path === resource : false
+        });
+        if(!apiResource || apiResource.length === 0) {
+            throw new Error("Method not found");
+        }
+
+        await this.setMethodFunction(restApi.PhysicalResourceId, httpMethod, apiResource[0].id, functionName, functionAlias, aliasStageVariable);
     }
 }

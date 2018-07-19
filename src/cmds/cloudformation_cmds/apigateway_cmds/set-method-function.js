@@ -1,17 +1,17 @@
-import {APIGatewayService} from '../../services/APIGatewayService'
+import {APIGatewayService} from '../../../services/APIGatewayService'
 
 export const command = 'set-method-function'
 export const desc = 'Set API gateway method lambda function and update lambda permissions'
 export const builder = (yargs) => {
-    yargs.option('rest-api-id', {
+    yargs.option('stack-name', {
         type: 'string',
-        describe: 'API gateway Id'
+        describe: 'CloudFormation Stack name or ARN'
     }).option('http-method', {
         type: 'string',
         describe: 'HTTP Method'
-    }).option('resource-id', {
+    }).option('resource', {
         type: 'string',
-        describe: 'Resource Id'
+        describe: 'Resource'
     }).option('function-name', {
         type: 'string',
         describe: 'Lambda function name (Thumbnail)'
@@ -21,9 +21,9 @@ export const builder = (yargs) => {
     }).option('alias-stage-variable', {
         type: 'string',
         describe: 'Variable to associate API Gateway stage deployment to lambda deployed version'
-    }).demandOption(['rest-api-id', 'http-method', 'resource-id', 'function-name']);
+    }).demandOption(['stack-name', 'http-method', 'resource', 'function-name']);
 }
 export function handler (argv) {
-    return new APIGatewayService().setMethodFunction(argv.restApiId, argv.httpMethod, argv.resourceId,
+    return new APIGatewayService().setStackMethodFunction(argv.stackName, argv.httpMethod, argv.resource,
         argv.functionName, argv.functionAlias, argv.aliasStageVariable);
 }
