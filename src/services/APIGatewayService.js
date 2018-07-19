@@ -4,18 +4,12 @@ import _ from 'lodash';
 import {CloudFormationService} from '../services/CloudFormationService';
 
 export class APIGatewayService {
-    async setMethodFunction(restApiId, httpMethod, resourceId, functionName, functionAlias, aliasStageVariable) {
+    async setMethodFunction(restApiId, httpMethod, resourceId, functionName, functionAlias) {
         let lambda = new AWS.Lambda();
         let apiGateway = new AWS.APIGateway();
 
         let lambdaFunction = await lambda.getFunction({
             FunctionName: functionName
-        }).promise();
-
-        let integration = await apiGateway.getIntegration({
-            httpMethod: httpMethod,
-            resourceId: resourceId,
-            restApiId: restApiId,
         }).promise();
 
         let resource = await apiGateway.getResource({
@@ -25,39 +19,35 @@ export class APIGatewayService {
 
         let functionArn = lambdaFunction.Configuration.FunctionArn;
         if(functionAlias) {
-            functionArn = `${functionArn}:${functionAlias}`;
-        }
-
-        let integrationFunctionArn = lambdaFunction.Configuration.FunctionArn;
-        if(aliasStageVariable) {
-            integrationFunctionArn = `${integrationFunctionArn}:\${stageVariables.${aliasStageVariable}}`
-        } else if(functionAlias) {
-            integrationFunctionArn = `${integrationFunctionArn}:${functionAlias}`
+            let alias = await lambda.getAlias({
+                FunctionName: functionName,
+                Name: functionAlias
+            }).promise();
+            if(!alias) {
+                throw new Error(`Alias ${functionAlias} not found`);
+            }
+            functionArn = alias.AliasArn;
         }
 
         let methodPath = _.replace(resource.path, /\{[^\/]+\}/g, '*');
         let accountId = functionArn.split(':')[4];
-        let integartionUrl = `arn:aws:apigateway:${AWS.config.region}:lambda:path/2015-03-31/functions/${integrationFunctionArn}/invocations`;
-
-        if(integration.uri === integartionUrl) {
-            console.log(`${httpMethod} ${resource.path} already set to ${functionName}`);
-            return;
-        }
 
         if(!resource.resourceMethods[httpMethod]) {
             throw new Error(`Method ${httpMethod} ${methodPath} not found`);
         }
 
-        await apiGateway.updateIntegration({
-            httpMethod: httpMethod,
-            resourceId: resourceId,
-            restApiId: restApiId,
-            patchOperations: [{
-                op: 'replace',
-                path: '/uri',
-                value: integartionUrl,
-            }]
-        }).promise();
+        let policy;
+        try {
+            policy = await lambda.getPolicy({
+                FunctionName: functionName,
+                Qualifier: functionAlias
+            }).promise();
+        } catch(error) {
+        }
+        if(policy) {
+            console.log(`${httpMethod} ${resource.path} already set to ${functionName}`);
+            return;
+        }
 
         let sourceArn = `arn:aws:execute-api:${AWS.config.region}:${accountId}:${restApiId}/*/${httpMethod}${methodPath}`;
         await lambda.addPermission({
@@ -68,10 +58,10 @@ export class APIGatewayService {
             SourceArn: sourceArn
         }).promise();
 
-        console.log(`Done setting ${httpMethod} ${resource.path} to ${functionName}`);
+        console.log(`Done setting ${httpMethod} ${resource.path} to ${functionName}${functionAlias ? ':' + functionAlias : ''}`);
     }
 
-    async setStackMethodFunction(stackName, httpMethod, resource, functionName, functionAlias, aliasStageVariable) {
+    async setStackMethodFunction(stackName, httpMethod, resource, functionName, functionAlias) {
         let apiGateway = new AWS.APIGateway();
         let cloudFormationService = new CloudFormationService();
 
@@ -93,6 +83,6 @@ export class APIGatewayService {
             throw new Error("Method not found");
         }
 
-        await this.setMethodFunction(restApi.PhysicalResourceId, httpMethod, apiResource[0].id, functionName, functionAlias, aliasStageVariable);
+        await this.setMethodFunction(restApi.PhysicalResourceId, httpMethod, apiResource[0].id, functionName, functionAlias);
     }
 }

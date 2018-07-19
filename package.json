@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "jest",
-    "build": "babel src --out-dir bin --source-maps inline;chmod +x ./bin/serverless-cd.js"
+    "build": "rm -rf bin;babel src --out-dir bin --source-maps inline;chmod +x ./bin/serverless-cd.js"
   },
   "dependencies": {
     "aws-sdk": "^2.268.1",

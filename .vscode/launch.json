@@ -42,13 +42,11 @@
                 "--http-method",
                 "GET",
                 "--resource",
-                "/users/{userId}/books",
+                "/hello-world",
                 "--function-name",
-                "BookShelf-UserBooks",
+                "BookShelf-HelloWorld",
                 "--function-alias",
-                "dev",
-                "--alias-stage-variable",
-                "fnAlias"
+                "dev"
             ],
             "sourceMaps": true,
             "preLaunchTask": "build",
