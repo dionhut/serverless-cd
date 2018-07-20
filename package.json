@@ -24,5 +24,9 @@
   "license": "ISC",
   "bin": {
       "serverless-cd": "./bin/serverless-cd.js"
-    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dionhut/serverless-cd"
   }
+}
