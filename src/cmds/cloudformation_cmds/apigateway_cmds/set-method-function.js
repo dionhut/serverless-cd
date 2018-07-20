@@ -1,7 +1,7 @@
 import {APIGatewayService} from '../../../services/APIGatewayService'
 
 export const command = 'set-method-function'
-export const desc = 'Set API gateway method lambda permissions'
+export const desc = 'Set API gateway method lambda permissions managed by specified cloudformation stack'
 export const builder = (yargs) => {
     yargs.option('stack-name', {
         type: 'string',

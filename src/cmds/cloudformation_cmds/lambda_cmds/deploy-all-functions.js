@@ -3,7 +3,7 @@ import {CloudFormationService} from '../../../services/CloudFormationService';
 
 export const command = 'deploy-all-functions <stack-name>';
 export const desc = 'Create or update Lambda function alias to a new version or a version linked to another alias for each ' +
-    'lambda created by cloudformation stack';
+    'lambda managed by cloudformation stack';
 export const builder = (yargs) => {
     yargs.positional('stack-name', {
         type: 'string',

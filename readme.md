@@ -2,9 +2,13 @@
 
 Some useful serverless CD commands to more easily execute combined AWS lambda, apigateway and cloudformation CLI commands for Serverless continuous deployment within CodePipeline and CodeBuild buildspecs in conjunction with CloudFormation template(s).
 
+## How to install
+
+npm install serverless-cd
+
 ## --help
 ```
-19:36 $ ./bin/serverless-cd.js --help
+$ ./bin/serverless-cd.js --help
 serverless-cd.js <command>
 
 Commands:
@@ -19,7 +23,7 @@ Options:
 
 ## lambda
 ```
-20:34 $ ./bin/serverless-cd.js lambda
+$ ./bin/serverless-cd.js lambda
 serverless-cd.js lambda <command>
 
 AWS Lambda continous deployment commands
@@ -31,24 +35,46 @@ Commands:
 
 ## apigateway
 ```
-20:35 $ ./bin/serverless-cd.js apigateway
+$ ./bin/serverless-cd.js apigateway --help
 serverless-cd.js apigateway <command>
 
 AWS API Gateway continous deployment commands
 
 Commands:
-  serverless-cd.js apigateway set-method-function  Set API gateway method lambda function and update lambda permissions
+  serverless-cd.js apigateway set-method-function  Set API gateway method lambda permissions
 ```
 
 ## cloudformation
 ```
-20:35 $ ./bin/serverless-cd.js cloudformation
+$ ./bin/serverless-cd.js cloudformation --help
 serverless-cd.js cloudformation <command>
 
 AWS CloudFormation continous deployment commands
 
 Commands:
-  serverless-cd.js cloudformation deploy-all-functions          Create or update Lambda function alias to a new version
+  serverless-cd.js cloudformation apigateway <command>  AWS API Gateway continous deployment commands
+  serverless-cd.js cloudformation lambda <command>      AWS Lambda continous deployment commands
+```
+### cloudformation apigateway
+```
+$ ./bin/serverless-cd.js cloudformation apigateway --help
+serverless-cd.js cloudformation apigateway <command>
+
+AWS API Gateway continous deployment commands
+
+Commands:
+  serverless-cd.js cloudformation apigateway                    Set API gateway method lambda permissions managed by
+  set-method-function                                           specified cloudformation stack
+```
+### cloudformation lambda
+```
+$ ./bin/serverless-cd.js cloudformation lambda --help
+serverless-cd.js cloudformation lambda <command>
+
+AWS Lambda continous deployment commands
+
+Commands:
+  serverless-cd.js cloudformation lambda deploy-all-functions   Create or update Lambda function alias to a new version
   <stack-name>                                                  or a version linked to another alias for each lambda
-                                                                created by cloudformation stack
+                                                                managed by cloudformation stack
 ```
