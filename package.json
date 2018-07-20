@@ -21,5 +21,8 @@
     "lodash": "^4.17.10"
   },
   "author": "dionhut@outlook.com",
-  "license": "ISC"
-}
+  "license": "ISC",
+  "bin": {
+      "serverless-cd": "./serverless-cd.js"
+    }
+  }
