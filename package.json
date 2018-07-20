@@ -1,10 +1,11 @@
 {
   "name": "serverless-cd",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "Some useful serverless CD commands to more easily execute combined AWS lambda, apigateway and cloudformation CLI commands for Serverless continuous deployment within CodePipeline and CodeBuild buildspecs in conjunction with CloudFormation template(s).",
   "scripts": {
     "test": "jest",
-    "build": "rm -rf bin;babel src --out-dir bin --source-maps inline;chmod +x ./bin/serverless-cd.js"
+    "build": "rm -rf bin;babel src --out-dir bin --source-maps inline;chmod +x ./bin/serverless-cd.js",
+    "prepublish": "npm run build"
   },
   "dependencies": {
     "aws-sdk": "^2.268.1",
@@ -28,5 +29,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/dionhut/serverless-cd"
-  }
+  },
+  "files": [
+    "bin/**/*"
+  ]
 }

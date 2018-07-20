@@ -8,7 +8,7 @@ Some useful serverless CD commands to more easily execute combined AWS lambda, a
 
 ## --help
 ```
-$ ./bin/serverless-cd.js --help
+$ serverless-cd.js --help
 serverless-cd.js <command>
 
 Commands:
@@ -23,7 +23,7 @@ Options:
 
 ## lambda
 ```
-$ ./bin/serverless-cd.js lambda
+$ serverless-cd.js lambda
 serverless-cd.js lambda <command>
 
 AWS Lambda continous deployment commands
@@ -35,7 +35,7 @@ Commands:
 
 ## apigateway
 ```
-$ ./bin/serverless-cd.js apigateway --help
+$ serverless-cd.js apigateway --help
 serverless-cd.js apigateway <command>
 
 AWS API Gateway continous deployment commands
@@ -46,7 +46,7 @@ Commands:
 
 ## cloudformation
 ```
-$ ./bin/serverless-cd.js cloudformation --help
+$ serverless-cd.js cloudformation --help
 serverless-cd.js cloudformation <command>
 
 AWS CloudFormation continous deployment commands
@@ -57,7 +57,7 @@ Commands:
 ```
 ### cloudformation apigateway
 ```
-$ ./bin/serverless-cd.js cloudformation apigateway --help
+$ serverless-cd.js cloudformation apigateway --help
 serverless-cd.js cloudformation apigateway <command>
 
 AWS API Gateway continous deployment commands
@@ -68,7 +68,7 @@ Commands:
 ```
 ### cloudformation lambda
 ```
-$ ./bin/serverless-cd.js cloudformation lambda --help
+$ serverless-cd.js cloudformation lambda --help
 serverless-cd.js cloudformation lambda <command>
 
 AWS Lambda continous deployment commands
