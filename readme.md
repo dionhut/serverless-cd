@@ -4,7 +4,7 @@ Some useful serverless CD commands to more easily execute combined AWS lambda, a
 
 ## How to install
 
-npm install serverless-cd
+`npm install -g serverless-cd`
 
 ## --help
 ```

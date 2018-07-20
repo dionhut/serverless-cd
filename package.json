@@ -1,6 +1,6 @@
 {
   "name": "serverless-cd",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Some useful serverless CD commands to more easily execute combined AWS lambda, apigateway and cloudformation CLI commands for Serverless continuous deployment within CodePipeline and CodeBuild buildspecs in conjunction with CloudFormation template(s).",
   "scripts": {
     "test": "jest",
@@ -23,6 +23,6 @@
   "author": "dionhut@outlook.com",
   "license": "ISC",
   "bin": {
-      "serverless-cd": "./serverless-cd.js"
+      "serverless-cd": "./bin/serverless-cd.js"
     }
   }
