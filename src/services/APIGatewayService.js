@@ -61,6 +61,33 @@ export class APIGatewayService {
         console.log(`Done setting ${httpMethod} ${resource.path} to ${functionName}${functionAlias ? ':' + functionAlias : ''}`);
     }
 
+    async deployStage(restApiId, stageName) {
+        let apiGateway = new AWS.APIGateway();
+
+        var params = {
+            restApiId: restApiId,
+            stageName: stageName,
+            variables: {
+              'fnAlias': stageName,
+            }
+        };
+        let result = await apiGateway.createDeployment(params).promise();
+    }
+
+    async deployStackStage(stackName, stageName) {
+        let apiGateway = new AWS.APIGateway();
+        let cloudFormationService = new CloudFormationService();
+
+        let restApis = await cloudFormationService.getStackAPIGateways(stackName);
+
+        if(!restApis || restApis.length == 0) {
+            throw new Error("Rest api not found");
+        }
+        let restApi = restApis[0];
+
+        await this.deployStage(restApi.PhysicalResourceId, stageName);
+    }
+
     async setStackMethodFunction(stackName, httpMethod, resource, functionName, functionAlias) {
         let apiGateway = new AWS.APIGateway();
         let cloudFormationService = new CloudFormationService();

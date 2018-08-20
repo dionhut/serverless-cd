@@ -28,6 +28,28 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Deploy Stage",
+            "program": "${workspaceFolder}/bin/serverless-cd.js",
+            "outFiles": [
+                "${workspaceFolder}/bin/**/*.js"
+            ],
+            "args": [
+                "apigateway",
+                "deploy-stage",
+                "--rest-api-id",
+                "9hd3e2tl62",
+                "--stage",
+                "dev"
+            ],
+            "sourceMaps": true,
+            "preLaunchTask": "build",
+            "env": {
+                "AWS_REGION": "us-east-1",
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Set Stack Method Function",
             "program": "${workspaceFolder}/bin/serverless-cd.js",
             "outFiles": [

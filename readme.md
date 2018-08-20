@@ -41,6 +41,7 @@ serverless-cd.js apigateway <command>
 AWS API Gateway continous deployment commands
 
 Commands:
+  serverless-cd.js apigateway deploy-stage         Deploy API gateway stage
   serverless-cd.js apigateway set-method-function  Set API gateway method lambda permissions
 ```
 
@@ -63,6 +64,8 @@ serverless-cd.js cloudformation apigateway <command>
 AWS API Gateway continous deployment commands
 
 Commands:
+  serverless-cd.js cloudformation apigateway deploy-stage       Deploy API gateway stage managed by specified
+                                                                cloudformation stack
   serverless-cd.js cloudformation apigateway                    Set API gateway method lambda permissions managed by
   set-method-function                                           specified cloudformation stack
 ```
