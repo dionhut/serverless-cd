@@ -29,12 +29,14 @@ export class APIGatewayService {
             functionArn = alias.AliasArn;
         }
 
-        let methodPath = _.replace(resource.path, /\{[^\/]+\}/g, '*');
+        let methodPath = _.replace(resource.path, /(\{[^\/]+\}|\{proxy\+\})/g, '*');
         let accountId = functionArn.split(':')[4];
 
         if(!resource.resourceMethods[httpMethod]) {
             throw new Error(`Method ${httpMethod} ${methodPath} not found`);
         }
+
+        httpMethod = httpMethod === "ANY" ? "*" : httpMethod;
 
         let policy;
         try {
